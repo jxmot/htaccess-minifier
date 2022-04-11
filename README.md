@@ -29,7 +29,7 @@ There are two PHP files provided -
 
 To minify an `.htaccess` file:
 
-**Note:** You will need PHP 7 or newer. Check for PHP with `php --version`.
+**Note:** You will need PHP 5.6 or newer. Check for PHP with `php --version`.
 
 1) Copy an `.htaccess` file into the same folder where the two PHP files are. *Or, use the sample file in this repository.*
 2) Run this command - `php ./run.php`.
