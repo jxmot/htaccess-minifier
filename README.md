@@ -70,11 +70,11 @@ function htaccessMinify($in, $out, $exclblocks = null, $rmvsp = false, $rmvnl = 
 ```
 
 Where:
-* `$in` - the path+name of the file to minimize
-* `$out` - the path+name of the minimized file
-* `$exclblocks` - a 2 dimensional array, contains *start* and *end* block markers
-* `$rmvsp` - if `true` remove extra white space
-* `$rmvnl` - if `true` remove blank lines
+* `$in` - the path+name of the file to minimize, **required**
+* `$out` - the path+name of the minimized file, **required**
+* `$exclblocks` - a 2 dimensional array, contains *start* and *end* block markers, **optional**
+* `$rmvsp` - if `true` remove extra white space, **optional**
+* `$rmvnl` - if `true` remove blank lines, **optional**
 
 The `$in` and `$out` arguments are required, the rest are optional and have *default* values.
 
@@ -91,6 +91,8 @@ if($ret->r === true) {
     exit('ERROR - '.$ret->m."\n");
 }
 ```
+
+See [htaccessMinify()](htaccessMinify.php#L69-L128) source.
 
 Minimize the file, and additionally remove empty lines - 
 
@@ -119,6 +121,8 @@ $exclblocks = [
 
 Any block that is "marked" will be left intact and copied into the minified file. 
 
+See [blockCheck()](htaccessMinify.php#L44-L68) source.
+
 ### Space Reduction
 
 *Space character reduction* is done per line. Essentially it's this - 
@@ -132,3 +136,11 @@ See [reduceSpace()](htaccessMinify.php#L18-L25) source.
 
 ### Empty Line Removal
 
+If a line contains **only** a `\n` (*newline*) do not write it to the output file.
+
+## What Else Can It Do?
+
+Well, probably with some *minor modifications* this script could do the same type of *minification* for shell script files. Just watch out for the first line!
+
+---
+<img src="http://webexperiment.info/extcounter/mdcount.php?id=htaccess-minifier">
