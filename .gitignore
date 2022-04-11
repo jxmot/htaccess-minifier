@@ -1,3 +1,4 @@
 *.session
 *.zip
 _*
+min.htaccess
