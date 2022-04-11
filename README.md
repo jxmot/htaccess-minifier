@@ -12,7 +12,7 @@ So I created a PHP script that will do the work for me... and I'm sharing it wit
 
 ## What is Minified?
 
-The "minification" done here is not like what's done for JavaScript, CSS, etc. But the script will - 
+The "minification" done here is not *exactly* like what's done for JavaScript, CSS, etc. But the script will - 
 
 * Leave *marked* blocks intact.
 * Remove blank lines.
@@ -63,6 +63,8 @@ if($ret->r === true) {
 }
 ```
 
+**Synopsis:**
+
 ```php
 function htaccessMinify($in, $out, $exclblocks = null, $rmvsp = false, $rmvnl = false)
 ```
@@ -73,11 +75,6 @@ Where:
 * `$exclblocks` - a 2 dimensional array, contains *start* and *end* block markers
 * `$rmvsp` - if `true` remove extra white space
 * `$rmvnl` - if `true` remove blank lines
-
-
-```php
-function htaccessMinify($in, $out, $exclblocks = null, $rmvsp = false, $rmvnl = false)
-```
 
 The `$in` and `$out` arguments are required, the rest are optional and have *default* values.
 
@@ -111,4 +108,27 @@ some stuff goes       here.
 # and a comment
 ### end
 ```
+
+With the following *exclusion markers* - 
+
+```php
+$exclblocks = [
+    ['### start', '### end']
+];
+```
+
+Any block that is "marked" will be left intact and copied into the minified file. 
+
+### Space Reduction
+
+*Space character reduction* is done per line. Essentially it's this - 
+
+* Read a line
+* Substitute all "  " (*2 space*) occurances with " " (*1 space*)
+* Repeat the substitution until "  " (*2 spaces*) is no longer found in the line
+* Write the line to the output file
+
+See [reduceSpace()](htaccessMinify.php#L18-L25) source.
+
+### Empty Line Removal
 
