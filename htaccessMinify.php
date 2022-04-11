@@ -86,7 +86,7 @@ $ret->o = 0;        // quantity of lines written
         if(($inp = fopen($in, 'r')) !== false) {
             // read one line at a time...
             while(($line = fgets($inp)) !== false) {
-                // is it a "\n" only line? if so, remove it?
+                // is it a "\n" only line? if so, remove it
                 if($rmvnl === true) if(strlen($line) === 1) continue;
                 $ret->i = $ret->i + 1;
                 // look for a "#" in the line
