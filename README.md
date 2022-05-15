@@ -38,7 +38,7 @@ You *should* see something like this - `min.htaccess has been saved - lines in: 
 
 ## htaccessMinify() Details
 
-The `run.ph` script contains - 
+The `run.php` script contains - 
 
 ```php
 require_once('./htaccessMinify.php');
