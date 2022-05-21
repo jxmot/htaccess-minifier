@@ -1,0 +1,11 @@
+{
+    "fileroot":"path/to/your/files/",
+    "in":".htaccess",
+    "out": "min.htaccess",
+    "exclblocks": [
+        ["BEGIN cPanel-generated handler", "END cPanel-generated handler"]
+        ,["### start", "### end"]
+    ],
+    "rmvsp": true,
+    "rmvnl": true
+}
