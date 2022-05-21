@@ -26,6 +26,7 @@ There are two PHP files provided -
 
 * `run.php` - Calls the `htaccessMinify.php:htaccessMinify()` function.
 * `htaccessMinify.php` - Contains `htaccessMinify()` and other functions for minification
+* `example_htaccessmin.json` - Contains argument values to be used when calling `htaccessMinify()`. See []().
 
 To minify an `.htaccess` file:
 
@@ -36,32 +37,31 @@ To minify an `.htaccess` file:
 
 You *should* see something like this - `min.htaccess has been saved - lines in: 259, lines out: 171`. And you will have a new file named `min.htaccess`.
 
-## htaccessMinify() Details
+## Running as a Utility
 
-The `run.php` script contains - 
+This is how I use htaccess-minifier. I add the 3 files to a folder in a website project and edit the `example_htaccessmin.json` file and save it as **`htaccessmin.json`**.
 
-```php
-require_once('./htaccessMinify.php');
-/*
-    Let's Minify!
-*/
-// The following are the "start" and "end" of what is 
-// referred to as an "exclusion block". It is a block 
-// of lines that will not be minified.
-$exclblocks = [
-    ['BEGIN cPanel-generated handler', 'END cPanel-generated handler']
-    ,['### start', '### end']
-];
-// minify the file... 
-// provide exclusion block markers, reduce space characters, remove empty lines...
-$ret = htaccessMinify('.htaccess', 'min.htaccess', $exclblocks, true, true);
-// how did it go?
-if($ret->r === true) {
-    exit($ret->m .' - lines in: '.$ret->i.', lines out: '.$ret->o."\n");
-} else {
-    exit('ERROR - '.$ret->m."\n");
+The JSON file contains argument values to be used when calling `htaccessMinify()`. For example:
+
+```
+{
+    "in":".htaccess",
+    "fileroot":"path/to/your/files/",
+    "out": "min.htaccess",
+    "exclblocks": [
+        ["BEGIN cPanel-generated handler", "END cPanel-generated handler"]
+        ,["### start", "### end"]
+    ],
+    "rmvsp": true,
+    "rmvnl": true
 }
 ```
+
+Edit the value of **`"fileroot"`** to point to where your `.htaccess` file is located. And edit the rest of the values as needed. See the following section for explanations of the other values' use.
+
+## htaccessMinify() Details
+
+See [htaccessMinify()](htaccessMinify.php#L69-L128) source.
 
 **Synopsis:**
 
@@ -70,13 +70,15 @@ function htaccessMinify($in, $out, $exclblocks = null, $rmvsp = false, $rmvnl = 
 ```
 
 Where:
-* `$in` - the path+name of the file to minimize, **required**
+* `$in` - the path+name of the file to minimize, **required**, EOL must be newline only, no CRLF pairs
 * `$out` - the path+name of the minimized file, **required**
 * `$exclblocks` - a 2 dimensional array, contains *start* and *end* block markers, **optional**
 * `$rmvsp` - if `true` remove extra white space, **optional**
 * `$rmvnl` - if `true` remove blank lines, **optional**
 
 The `$in` and `$out` arguments are required, the rest are optional and have *default* values.
+
+**Example Usage:**
 
 Minimal Usage:
 
@@ -92,12 +94,36 @@ if($ret->r === true) {
 }
 ```
 
-See [htaccessMinify()](htaccessMinify.php#L69-L128) source.
-
-Minimize the file, and additionally remove empty lines - 
+Minimize the file, and additionally remove empty lines: 
 
 ```php
 $ret = htaccessMinify('.htaccess', 'min.htaccess', null, false, true);
+```
+
+Minimize the file, set exclusion blocks, reduce spaces, and remove empty lines: 
+
+```
+// The following are the "start" and "end" of what is 
+// referred to as an "exclusion block". It is a block 
+// of lines that will not be minified.
+$exclblocks = [
+    ['BEGIN cPanel-generated handler', 'END cPanel-generated handler']
+    ,['### start', '### end']
+];
+// minify the file, assuming it's in the same location as this script...
+// provide exclusion block markers, reduce space characters, remove empty lines...
+$ret = htaccessMinify('.htaccess', 'min.htaccess', $exclblocks, true, true);
+```
+
+The return value `$ret` should be checked, for example:
+
+```
+// how did it go?
+if(isset($ret->r) && ($ret->r === true)) {
+    exit($ret->m .' - lines in: '.$ret->i.', lines out: '.$ret->o."\n");
+} else {
+    exit('ERROR - '.$ret->m."\n");
+}
 ```
 
 ### Exclusion Block Markers
@@ -128,7 +154,7 @@ See [blockCheck()](htaccessMinify.php#L44-L68) source.
 *Space character reduction* is done per line. Essentially it's this - 
 
 * Read a line
-* Substitute all "  " (*2 space*) occurances with " " (*1 space*)
+* Substitute all "  " (*2 space*) occurrences with " " (*1 space*)
 * Repeat the substitution until "  " (*2 spaces*) is no longer found in the line
 * Write the line to the output file
 
