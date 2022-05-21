@@ -1,6 +1,7 @@
 <?php
 /*
-    Demonstration of htaccessMinify()
+    Demonstration of htaccessMinify(), also a handy 
+    utility application.
 
     Author: https://github.com/jxmot
     Repository: https://github.com/jxmot/htaccess-minifier
